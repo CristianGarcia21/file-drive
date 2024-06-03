@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,11 +9,14 @@ import {
 } from "@clerk/nextjs";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { useEffect } from "react";
 
 export default function Home() {
+  const files = useQuery(api.files.getFiles);
+  const createFile = useMutation(api.files.createFile);
 
-  const files = useQuery(api.files.getFiles)
-  const cratedFile = useMutation(api.files.createFile)
+
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <SignedIn>
@@ -27,15 +30,19 @@ export default function Home() {
         </SignInButton>
       </SignedOut>
 
-      {files?.map((file)=>{
-        return <div key={file.id}>{file.name}</div>
+      {files?.map((file) => {
+        return <div key={file._id}>{file.name}</div>;
       })}
 
-      <Button onClick={()=>{
-        cratedFile({
-          name: "test"
-        })
-      }}>Click Me!</Button>
+      <Button
+        onClick={() => {
+          createFile({
+            name: "hello world",
+          });
+        }}
+      >
+        Click Me
+      </Button>
     </main>
   );
 }
